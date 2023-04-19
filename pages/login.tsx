@@ -1,5 +1,4 @@
 import Button from "@/components/Button";
-import AuthenticationLayout from "@/components/Header/Authentication/AuthLayout";
 import Input from "@/components/Input";
 import Link from "next/link";
 import React from "react";
@@ -12,7 +11,9 @@ export default function LoginPage() {
     handleSubmit,
     formState: { errors },
   } = useForm({});
-  const onSubmit = () => {};
+  const onSubmit = handleSubmit((data) => {
+    console.log(data);
+  });
 
   return (
     <>
