@@ -1,4 +1,3 @@
-"use client";
 import axios, { AxiosError, type AxiosInstance } from "axios";
 import { toast } from "react-toastify";
 import {

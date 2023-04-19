@@ -1,12 +1,10 @@
-"use client";
 import config from "@/constants/config";
 import HttpStatusCode from "@/constants/httpStatusCode.enum";
 import { ErrorResponse } from "@/types/utils.type";
 import axios, { AxiosError } from "axios";
 import userImage from "../assets/images/user.svg";
-
+//Muốn sau khi chạy xong fn này thì error sẽ chuyển về 1 type nhất định
 export function isAxiosError<T>(error: unknown): error is AxiosError<T> {
-  // eslint-disable-next-line import/no-named-as-default-member
   return axios.isAxiosError(error);
 }
 

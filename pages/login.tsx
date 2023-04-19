@@ -1,22 +1,63 @@
-import Button from "@/components/Button";
-import Input from "@/components/Input";
-import Link from "next/link";
-import React from "react";
 import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useContext } from "react";
+import { Schema, schema } from "@/utils/rules";
+import { useMutation } from "@tanstack/react-query";
+import authApi from "@/apis/auth.api";
+import { isAxiosUnprocessableEntityError } from "@/utils/utils";
+import { ErrorResponse } from "@/types/utils.type";
+import Head from "next/head";
+import Input from "@/components/Input";
+import Button from "@/components/Button";
+import Link from "next/link";
 
-export default function LoginPage() {
+type FormData = Pick<Schema, "email" | "password">;
+const loginSchema = schema.pick(["email", "password"]);
+
+export default function Login() {
+  // const { setIsAuthenticated, setProfile } = useContext(AppContext);
   const {
     register,
     setError,
     handleSubmit,
     formState: { errors },
-  } = useForm({});
+  } = useForm<FormData>({
+    resolver: yupResolver(loginSchema),
+  });
+
+  const loginMutation = useMutation({
+    mutationFn: (body: Omit<FormData, "confirm_password">) =>
+      authApi.login(body),
+  });
   const onSubmit = handleSubmit((data) => {
-    console.log(data);
+    loginMutation.mutate(data, {
+      onSuccess: (data) => {
+        // setIsAuthenticated(true);
+        // setProfile(data.data.data.user);
+        // navigate("/");
+      },
+      onError: (error) => {
+        if (isAxiosUnprocessableEntityError<ErrorResponse<FormData>>(error)) {
+          const formError = error.response?.data.data;
+          if (formError) {
+            Object.keys(formError).forEach((key) => {
+              setError(key as keyof FormData, {
+                message: formError[key as keyof FormData],
+                type: "Server",
+              });
+            });
+          }
+        }
+      },
+    });
   });
 
   return (
-    <>
+    <div className="bg-orange">
+      <Head>
+        <title>Đăng nhập | Shopee Clone</title>
+        <meta name="description" content="Đăng nhập vào dự án Shopee Clone" />
+      </Head>
       <div className="container">
         <div className="grid grid-cols-1 py-12 lg:grid-cols-5 lg:py-32 lg:pr-10">
           <div className="lg:col-span-2 lg:col-start-4">
@@ -31,6 +72,7 @@ export default function LoginPage() {
                 register={register}
                 type="email"
                 className="mt-8"
+                errorMessage={errors.email?.message}
                 placeholder="Email"
               />
               <Input
@@ -39,6 +81,7 @@ export default function LoginPage() {
                 type="password"
                 className="mt-2"
                 classNameEye="absolute right-[5px] h-5 w-5 cursor-pointer top-[12px]"
+                errorMessage={errors.password?.message}
                 placeholder="Password"
                 autoComplete="on"
               />
@@ -46,6 +89,8 @@ export default function LoginPage() {
                 <Button
                   type="submit"
                   className="flex items-center justify-center w-full px-2 py-4 text-sm text-white uppercase bg-red-500 hover:bg-red-600"
+                  isLoading={loginMutation.isLoading}
+                  disabled={loginMutation.isLoading}
                 >
                   Đăng nhập
                 </Button>
@@ -60,6 +105,6 @@ export default function LoginPage() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
