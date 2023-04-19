@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ToastContainer } from "react-toastify";
 import MainLayout from "@/layouts/MainLayout";
+import { AppProvider } from "@/contexts/app.context";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -17,9 +18,11 @@ export default function App({ Component, pageProps }: AppProps) {
     <>
       <QueryClientProvider client={queryClient}>
         <MainLayout>
-          <Component {...pageProps} />
-          <ReactQueryDevtools initialIsOpen={false} />
-          <ToastContainer />
+          <AppProvider>
+            <Component {...pageProps} />
+            <ReactQueryDevtools initialIsOpen={false} />
+            <ToastContainer />
+          </AppProvider>
         </MainLayout>
       </QueryClientProvider>
     </>

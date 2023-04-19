@@ -15,12 +15,15 @@ import Head from "next/head";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
 import Link from "next/link";
+import { AppContext } from "@/contexts/app.context";
+import { useRouter } from "next/router";
 
 type FormData = Pick<Schema, "email" | "password" | "confirm_password">;
 const registerSchema = schema.pick(["email", "password", "confirm_password"]);
 
 export default function Register() {
-  //   const { setIsAuthenticated, setProfile } = useContext(AppContext);
+  const { setIsAuthenticated, setProfile } = useContext(AppContext);
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -37,9 +40,9 @@ export default function Register() {
     const body = omit(data, ["confirm_password"]);
     registerAccountMutation.mutate(body, {
       onSuccess: (data) => {
-        // setIsAuthenticated(true);
+        setIsAuthenticated(true);
         // setProfile(data.data.data.user);
-        // navigate("/");
+        router.push("/");
       },
       onError: (error) => {
         if (

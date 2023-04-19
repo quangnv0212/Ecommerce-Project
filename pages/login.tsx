@@ -10,12 +10,15 @@ import Head from "next/head";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
 import Link from "next/link";
+import { AppContext } from "@/contexts/app.context";
+import { useRouter } from "next/router";
 
 type FormData = Pick<Schema, "email" | "password">;
 const loginSchema = schema.pick(["email", "password"]);
 
 export default function Login() {
-  // const { setIsAuthenticated, setProfile } = useContext(AppContext);
+  const { setIsAuthenticated, setProfile } = useContext(AppContext);
+  const router = useRouter();
   const {
     register,
     setError,
@@ -32,9 +35,9 @@ export default function Login() {
   const onSubmit = handleSubmit((data) => {
     loginMutation.mutate(data, {
       onSuccess: (data) => {
-        // setIsAuthenticated(true);
+        setIsAuthenticated(true);
         // setProfile(data.data.data.user);
-        // navigate("/");
+        router.push("/");
       },
       onError: (error) => {
         if (isAxiosUnprocessableEntityError<ErrorResponse<FormData>>(error)) {

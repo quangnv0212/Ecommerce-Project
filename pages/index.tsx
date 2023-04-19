@@ -5,9 +5,5 @@ import Header from "@/components/Header/Header/Header";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
-  return (
-    <>
-      <Header></Header>
-    </>
-  );
+  return <>Home Page</>;
 }
