@@ -1,35 +1,32 @@
-"use client";
 import { User } from "@/types/user.type";
-
+import Cookies from "js-cookie";
 export const LocalStorageEventTarget = new EventTarget();
 
 export const setAccessTokenToLS = (access_token: string) => {
-  localStorage.setItem("access_token", access_token);
+  Cookies.set("access_token", access_token);
 };
 
 export const setRefreshTokenToLS = (refresh_token: string) => {
-  localStorage.setItem("refresh_token", refresh_token);
+  Cookies.set("refresh_token", refresh_token);
 };
 
 export const clearLS = () => {
-  localStorage.removeItem("access_token");
-  localStorage.removeItem("refresh_token");
-  localStorage.removeItem("profile");
+  Cookies.remove("access_token");
+  Cookies.remove("refresh_token");
+  Cookies.remove("profile");
   const clearLSEvent = new Event("clearLS");
   LocalStorageEventTarget.dispatchEvent(clearLSEvent);
 };
 
-export const getAccessTokenFromLS = () =>
-  localStorage.getItem("access_token") || "";
+export const getAccessTokenFromLS = () => Cookies.get("access_token") || "";
 
-export const getRefreshTokenFromLS = () =>
-  localStorage.getItem("refresh_token") || "";
+export const getRefreshTokenFromLS = () => Cookies.get("refresh_token") || "";
 
 export const getProfileFromLS = () => {
-  const result = localStorage.getItem("profile");
+  const result = Cookies.get("profile");
   return result ? JSON.parse(result) : null;
 };
 
 export const setProfileToLS = (profile: User) => {
-  localStorage.setItem("profile", JSON.stringify(profile));
+  Cookies.set("profile", JSON.stringify(profile));
 };

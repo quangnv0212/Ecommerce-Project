@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Product,
   ProductList,
