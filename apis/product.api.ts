@@ -1,10 +1,6 @@
-import {
-  Product,
-  ProductList,
-  ProductListConfig,
-} from "src/types/product.type";
-import { SuccessResponse } from "src/types/utils.type";
-import http from "src/utils/http";
+import { Product, ProductList, ProductListConfig } from "@/types/product.type";
+import { SuccessResponse } from "@/types/utils.type";
+import http from "@/utils/http";
 
 const URL = "products";
 const productApi = {

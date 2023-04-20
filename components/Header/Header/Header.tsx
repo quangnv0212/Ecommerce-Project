@@ -3,8 +3,10 @@ import { useContext } from "react";
 import noproduct from "src/assets/images/no-product.png";
 import Link from "next/link";
 import Popover from "@/components/Popover";
-import NavHeader from "@/components/NavHeader";
-
+import dynamic from "next/dynamic";
+const NavHeader = dynamic(() => import("@/components/NavHeader"), {
+  ssr: false,
+});
 const MAX_PURCHASES = 5;
 export default function Header() {
   // const { isAuthenticated } = useContext(AppContext);
